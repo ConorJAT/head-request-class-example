@@ -31,13 +31,20 @@
       const url = userForm.querySelector('#urlField').value;
       const method = userForm.querySelector('#methodSelect').value;
       
-
+      fetch(url, {method});
     };
 
 
     const init = () => {
       const userForm = document.querySelector('#userForm');
       
+      const getUsers = (e) => {
+        e.preventDefault();
+        requestUpdate(userForm);
+        return false;
+      };
+
+      userForm.addEventListener('submit', getUsers);
     };
 
     window.onload = init;
