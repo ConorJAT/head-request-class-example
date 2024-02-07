@@ -5,7 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
-    const handleResponse = (response, parseResponse) => {
+    const handleResponse = async (response, parseResponse) => {
       const content = document.querySelector('#content');
 
       switch(response.status) {
@@ -25,13 +25,19 @@
           content.innerHTML = `Error code not implemented by client.`;
           break;
       }
+
+      if (!parseResponse){ return; }
+
+      const data = await response.json();
+      content.innerHTML += `<p>${JSON.stringify(data)}</p>`;
     };
 
-    const requestUpdate = (userForm) => {
+    const requestUpdate = async (userForm) => {
       const url = userForm.querySelector('#urlField').value;
       const method = userForm.querySelector('#methodSelect').value;
       
-      fetch(url, {method});
+      const response = await fetch(url, {method});
+      handleResponse(response, method === 'get');
     };
 
 

@@ -6,17 +6,17 @@ const jsonHandler = require('./jsonResponses.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
-  'GET': {
+  GET: {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
     '/getUsers': jsonHandler.getUsers,
     '/updateUsers': jsonHandler.updateUser,
-    notFound: jsonHandler.notFound
+    notFound: jsonHandler.notFound,
   },
-  'HEAD': {
+  HEAD: {
     '/getUsers': jsonHandler.getUsersMeta,
-    notFound: jsonHandler.notFoundMeta
-  }
+    notFound: jsonHandler.notFoundMeta,
+  },
 };
 
 const onRequest = (request, response) => {
@@ -25,17 +25,16 @@ const onRequest = (request, response) => {
   // methodHandlers is either the 'GET' or 'HEAD' object from urlStruct.
   const methodHandlers = urlStruct[request.method];
   if (!methodHandlers) {
-    return urlStruct['HEAD'].notFound(request, response);
+    urlStruct.HEAD.notFound(request, response);
   }
 
   // handlerFunction is specific function based off the object methodHandlers represents.
   const handlerFunction = methodHandlers[parsedUrl.pathname];
-  if(handlerFunction) {
+  if (handlerFunction) {
     handlerFunction(request, response);
   } else {
-    methodHandlers[parsedUrl.pathname].notFound(request, response);
+    methodHandlers.notFound(request, response);
   }
-
 
   // if (urlStruct[parsedUrl.pathname]) {
   //   urlStruct[parsedUrl.pathname](request, response);
